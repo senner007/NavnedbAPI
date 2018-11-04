@@ -12,12 +12,15 @@ namespace NavnedbAPI.Controllers
     {
         // GET api/values
         // TODO: rename controller
-         [HttpGet]
+        [HttpGet]
         public ActionResult<IEnumerable<Navne>> Get(string startsWith = "", string sex = "")
         {
             NavnedbContext dbContext = new NavnedbContext();
             // TODO : improve me!
-            var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(startsWith) || startsWith == "") && (n.Køn == sex || sex == "")).Select(s => new Navne() { Navn = s.Navn, Køn = s.Køn});
+            if (startsWith == "" && sex == "") {
+                return Ok(dbContext.Navne);
+            }
+            var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(startsWith) || startsWith == "") && (n.Køn == sex || sex == "")).Select(s => new { Navn = s.Navn, Køn = s.Køn});
             return Ok(navne);
         }
 
