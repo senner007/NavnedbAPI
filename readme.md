@@ -21,7 +21,7 @@ https://www.codetoshow.com/api/navne/1
 ### To build to bin/Release/netcoreapp2.1/win10-x64/publish
 - dotnet publish -c Release -r win10-x64 /p:TrimUnusedDependencies=true
 
-### appsettings.json:
+### Create an appsettings.json with a connectionstring to db:
 
 ```
 {
