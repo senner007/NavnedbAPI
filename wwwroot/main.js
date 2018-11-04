@@ -12,14 +12,17 @@ function processLargeArray(array) {
         var cnt = chunk;
         // TODO : Improve me!
         var textIdFormat = textId.value != "" ? textId.value[0].toUpperCase() + textId.value.toLowerCase().substring(1, textId.value.length) : "";
+        // TODO : Check for hyphen - Improve me!
         if (textIdFormat.indexOf('-') != -1 && textIdFormat[textIdFormat.indexOf('-') +1]) {
-            textIdFormat = textIdFormat.substring(0, textIdFormat.indexOf('-') + 1) + textIdFormat.charAt(textIdFormat.indexOf('-') +1).toUpperCase();
+            textIdFormat = textIdFormat.substring(0, textIdFormat.indexOf('-') + 1) + 
+            textIdFormat.charAt(textIdFormat.indexOf('-') +1).toUpperCase() +
+            textIdFormat.substring(textIdFormat.indexOf('-') +2, textIdFormat.length).toLowerCase();
         }
 
         var fragment = document.createDocumentFragment();
         while (cnt-- && index < array.length) {
             // process array[index] here
-            
+            console.log(index)
             if (array[index].navn.startsWith(textIdFormat)) {
                 var el = document.createElement('li');
                 el.classList.add('list-group-item'); 
