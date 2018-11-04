@@ -10,7 +10,12 @@ function processLargeArray(array) {
 
     function doChunk() {
         var cnt = chunk;
+        // TODO : Improve me!
         var textIdFormat = textId.value != "" ? textId.value[0].toUpperCase() + textId.value.toLowerCase().substring(1, textId.value.length) : "";
+        if (textIdFormat.indexOf('-') != -1 && textIdFormat[textIdFormat.indexOf('-') +1]) {
+            textIdFormat = textIdFormat.substring(0, textIdFormat.indexOf('-') + 1) + textIdFormat.charAt(textIdFormat.indexOf('-') +1).toUpperCase();
+        }
+
         var fragment = document.createDocumentFragment();
         while (cnt-- && index < array.length) {
             // process array[index] here
