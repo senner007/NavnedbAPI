@@ -1,7 +1,5 @@
 
 // https://stackoverflow.com/questions/10344498/best-way-to-iterate-over-an-array-without-blocking-the-ui/10344560#10344560
-
-
 function processLargeArray(array) {
     reset();
     // set this to whatever number of items you can process at once
@@ -21,8 +19,6 @@ function processLargeArray(array) {
 
         var fragment = document.createDocumentFragment();
         while (cnt-- && index < array.length) {
-            // process array[index] here
-            console.log(index)
             if (array[index].navn.startsWith(textIdFormat)) {
                 var el = document.createElement('li');
                 el.classList.add('list-group-item'); 
