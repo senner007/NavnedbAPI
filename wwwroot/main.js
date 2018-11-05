@@ -1,26 +1,26 @@
 
 // https://stackoverflow.com/questions/10344498/best-way-to-iterate-over-an-array-without-blocking-the-ui/10344560#10344560
-function processLargeArray(array) {
+function processLargeArray(array, textInput) {
     reset();
     // set this to whatever number of items you can process at once
     var chunk = 500; // adjust the chunk size;
     var index = 0;
 
+    var textFormat = textInput.value != "" ? textInput.value[0].toUpperCase() + textInput.value.toLowerCase().substring(1, textInput.value.length) : "";
+        // TODO : Check for hyphen - Improve me!
+    if (textFormat.indexOf('-') != -1 && textFormat[textFormat.indexOf('-') +1]) {
+        textFormat = textFormat.substring(0, textFormat.indexOf('-') + 1) + 
+        textFormat.charAt(textFormat.indexOf('-') +1).toUpperCase() +
+        textFormat.substring(textFormat.indexOf('-') +2, textFormat.length).toLowerCase();
+    }
+
     function doChunk() {
         var cnt = chunk;
         // TODO : Improve me!
-        var textIdFormat = textId.value != "" ? textId.value[0].toUpperCase() + textId.value.toLowerCase().substring(1, textId.value.length) : "";
-        // TODO : Check for hyphen - Improve me!
-        if (textIdFormat.indexOf('-') != -1 && textIdFormat[textIdFormat.indexOf('-') +1]) {
-            textIdFormat = textIdFormat.substring(0, textIdFormat.indexOf('-') + 1) + 
-            textIdFormat.charAt(textIdFormat.indexOf('-') +1).toUpperCase() +
-            textIdFormat.substring(textIdFormat.indexOf('-') +2, textIdFormat.length).toLowerCase();
-        }
-
         var fragment = document.createDocumentFragment();
         while (cnt-- && index < array.length) {
-            console.log(cnt)
-            if (array[index].navn.startsWith(textIdFormat)) {
+            // console.log(cnt)
+            if (array[index].navn.startsWith(textFormat)) {
                 var el = document.createElement('li');
                 el.classList.add('list-group-item'); 
                 el.innerText = array[index].navn + " køn: " + array[index].køn;
@@ -28,8 +28,8 @@ function processLargeArray(array) {
             }
             ++index;
         }
-
         document.querySelector('ul').appendChild(fragment);
+        
         if (index < array.length) {
             clearVar = setTimeout(doChunk, 1);
         }
@@ -43,51 +43,68 @@ function reset () {
     document.querySelector('ul').innerHTML = "";
 }
 
+;(function setHandlers () {
 
-var cachedArray = undefined;
+    var cachedArray = undefined;
 
-const textId = document.querySelector("#textId");
+    var textInput = document.querySelector("#textId");
 
-document.querySelector("#textId").addEventListener('keyup', function (e) {
+    document.querySelector("#textId").addEventListener('keyup', function (e) {
+        
+        if (textInput.value == "") {
+            reset();
+            return;
+        }
+
+        if (cachedArray && cachedArray.length > 0 && cachedArray[0].navn[0].toLowerCase() == textInput.value[0].toLowerCase()) {
+            console.log('from cached');
+            processLargeArray(cachedArray, textInput);
+        } else {
+            console.log('from fetch');
+            calltheApi();
+        }
     
-    if (textId.value == "") {
-        reset();
-        return;
+    });
+
+    document.querySelector("#inputSex").addEventListener('change', function (e) {
+    
+        cachedArray = undefined; 
+        if (textId.value == "") {
+            reset();
+            return;
+        }
+
+        calltheApi();
+    });
+
+    function calltheApi () {
+        callApi(textInput).then(arr => {
+            cachedArray = arr; 
+            processLargeArray(arr, textId)
+        });
     }
 
-    if (cachedArray && cachedArray.length > 0 && cachedArray[0].navn[0].toLowerCase() == textId.value[0].toLowerCase()) {
-        console.log('from cached')
-        processLargeArray(cachedArray);
-    } else if (!waitTrigger){
-        console.log('from fetch')
-        callApi().then(t => processLargeArray(t));
-    }
-  
-})
-
-document.querySelector("#inputSex").addEventListener('change', function (e) {
-   
-    cachedArray = undefined; 
-    if (textId.value == "") {
-        reset();
-        return;
-    }
-
-    callApi().then(t => processLargeArray(t));
-})
+}());
 
 
 // waitTrigger will remain true when Promise pending
-var waitTrigger;
 
-async function callApi () {
-    waitTrigger = true;
-    const response = await fetch('api/navne?startsWith=' + textId.value[0] + (checkSex() ? '&sex=' + checkSex(): "")); 
-    const toJson = await response.json();
-    cachedArray = toJson; 
-    waitTrigger = false;
-    return toJson;
-}
+const callApi = (function () {
+
+    if (waitTrigger) return;
+
+    var waitTrigger;
+
+    return async function callApi (textInput) {
+        waitTrigger = true;
+        const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (checkSex() ? '&sex=' + checkSex(): "")); 
+        const toJson = await response.json();
+        waitTrigger = false;
+        return toJson;
+    }
+
+}());
+
 
 const checkSex = (function IIFE () {
     // close over inputSex var
