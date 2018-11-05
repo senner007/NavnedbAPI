@@ -11,8 +11,7 @@ namespace NavnedbAPI.Controllers
     [ApiController]
     public class NavneController : ControllerBase
     {
-        // GET api/values
-        
+        // GET api/navne
         [HttpGet]
         public ActionResult<IEnumerable<Navne>> Get(string startsWith = "", string sex = "")
         {
@@ -27,7 +26,7 @@ namespace NavnedbAPI.Controllers
             return Ok(navne);
         }
 
-        // GET api/values/5
+        // GET api/navne/1
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
