@@ -57,7 +57,9 @@ namespace NavnedbAPI
                     template: "{controller=Home}/{action=Index}"
                 );
             });
+            app.UseDefaultFiles();
             app.UseStaticFiles();
+            
 
       
             

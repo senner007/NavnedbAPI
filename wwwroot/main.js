@@ -19,6 +19,7 @@ function processLargeArray(array) {
 
         var fragment = document.createDocumentFragment();
         while (cnt-- && index < array.length) {
+            console.log(cnt)
             if (array[index].navn.startsWith(textIdFormat)) {
                 var el = document.createElement('li');
                 el.classList.add('list-group-item'); 

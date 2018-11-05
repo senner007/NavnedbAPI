@@ -1,0 +1,23 @@
+body, html {
+    height:100%;
+    overflow: hidden;
+}
+.container {
+    margin-top: 10px;
+    height:100%;
+    overflow:hidden;
+}
+ul {
+   overflow:auto; 
+    height:90%;
+    padding: 0;
+    -webkit-overflow-scrolling: touch
+}
+
+@media only screen and (max-width: 768px) {
+    ul {
+        overflow:auto; 
+         height:86%;
+         padding: 0;
+     }
+}
