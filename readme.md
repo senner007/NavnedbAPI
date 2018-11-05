@@ -4,11 +4,8 @@ https://www.codetoshow.com
 # API
 
 https://www.codetoshow.com/api/navne
-
 https://www.codetoshow.com/api/navne?startsWith=a
-
 https://www.codetoshow.com/api/navne?startsWith=a&sex=m
-
 https://www.codetoshow.com/api/navne/1
 
 
@@ -36,6 +33,9 @@ https://www.codetoshow.com/api/navne/1
   "AllowedHosts": "*"
 }
 ```
+
+### Db:
+- navne_mysql.sql
 
  ### Browser support:
 
