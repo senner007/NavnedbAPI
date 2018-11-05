@@ -2,9 +2,6 @@
 // https://stackoverflow.com/questions/10344498/best-way-to-iterate-over-an-array-without-blocking-the-ui/10344560#10344560
 function processLargeArray(array, textInput) {
     reset();
-    // set this to whatever number of items you can process at once
-    var chunk = 500; // adjust the chunk size;
-    var index = 0;
 
     var textFormat = textInput.value != "" ? textInput.value[0].toUpperCase() + textInput.value.toLowerCase().substring(1, textInput.value.length) : "";
         // TODO : Check for hyphen - Improve me!
@@ -13,6 +10,10 @@ function processLargeArray(array, textInput) {
         textFormat.charAt(textFormat.indexOf('-') +1).toUpperCase() +
         textFormat.substring(textFormat.indexOf('-') +2, textFormat.length).toLowerCase();
     }
+
+    // set this to whatever number of items you can process at once
+    var chunk = 500; 
+    var index = 0;
 
     function doChunk() {
         var cnt = chunk;
