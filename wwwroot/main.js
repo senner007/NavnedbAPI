@@ -1,9 +1,9 @@
 
 // https://stackoverflow.com/questions/10344498/best-way-to-iterate-over-an-array-without-blocking-the-ui/10344560#10344560
-function processLargeArray(array, textInput) {
+function processLargeArray(array, input) {
     reset();
 
-    var textFormat = textInput.value != "" ? textInput.value[0].toUpperCase() + textInput.value.toLowerCase().substring(1, textInput.value.length) : "";
+    var textFormat = input.value != "" ? input.value[0].toUpperCase() + input.value.toLowerCase().substring(1, input.value.length) : "";
         // TODO : Check for hyphen - Improve me!
     if (textFormat.indexOf('-') != -1 && textFormat[textFormat.indexOf('-') +1]) {
         textFormat = textFormat.substring(0, textFormat.indexOf('-') + 1) + 
@@ -20,7 +20,7 @@ function processLargeArray(array, textInput) {
         // TODO : Improve me!
         var fragment = document.createDocumentFragment();
         while (cnt-- && index < array.length) {
-           
+            // console.log(cnt)
             if (array[index].navn.startsWith(textFormat)) {
                 var el = document.createElement('li');
                 el.classList.add('list-group-item'); 
@@ -32,15 +32,20 @@ function processLargeArray(array, textInput) {
         document.querySelector('ul').appendChild(fragment);
         
         if (index < array.length) {
-            clearVar = setTimeout(doChunk, 1);
+            GLOBAL.clearSetTimeout = setTimeout(doChunk, 1);
         }
     }
     doChunk();
 }
 
-var clearVar;
+var GLOBAL = {
+    clearSetTimeout : false,
+    waitForPromise: false
+}
+
+
 function reset () {
-    if (clearVar) clearTimeout(clearVar);
+    if (GLOBAL.clearSetTimeout) clearTimeout(GLOBAL.clearSetTimeout);
     document.querySelector('ul').innerHTML = "";
 }
 
@@ -60,7 +65,7 @@ function reset () {
         if (cachedArray && cachedArray.length > 0 && cachedArray[0].navn[0].toLowerCase() == textInput.value[0].toLowerCase()) {
             console.log('from cached');
             processLargeArray(cachedArray, textInput);
-        } else if (!waitTrigger){
+        } else if(!GLOBAL.waitForPromise) {
             console.log('from fetch');
             calltheApi();
         }
@@ -90,20 +95,13 @@ function reset () {
 
 // waitTrigger will remain true when Promise pending
 
-var waitTrigger;
-
-const callApi = (function () {
-
-    return async function callApi (textInput) {
-   
-        waitTrigger = true;
-        const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (checkSex() ? '&sex=' + checkSex(): "")); 
-        const toJson = await response.json();
-        waitTrigger = false;
-        return toJson;
-    }
-
-}());
+async function callApi (textInput) {
+    GLOBAL.waitForPromise = true;
+    const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (checkSex() ? '&sex=' + checkSex(): "")); 
+    const toJson = await response.json();
+    GLOBAL.waitForPromise = false;
+    return toJson;
+}
 
 
 const checkSex = (function IIFE () {
