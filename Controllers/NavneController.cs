@@ -27,13 +27,35 @@ namespace NavnedbAPI.Controllers
         }
 
         // GET api/navne/1
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet("{id:int}")]
+        [Route("api/[controller]/{id}")]
+        public ActionResult<Navne> GetId(int id)
         {
             NavnedbContext dbContext = new NavnedbContext();
-            var navn = dbContext.Navne.Where(n => n.Id == id);
+            var navn = dbContext.Navne.Where(n => n.Id == id).FirstOrDefault();
+            if (navn == null) return NotFound("Id not found");
             return Ok(navn);
+        }
+
+
+        [HttpGet("{navn}")]
+        [Route("api/[controller]/{navn}")]
+        public string GetName(string navn)
+
+        {
+            NavnedbContext dbContext = new NavnedbContext();
+            var NameInDB = dbContext.Navne.Where(n => n.Navn == navn).FirstOrDefault();
+
+            if (NameInDB == null) return "Ukendt navn";
+
+            if (NameInDB.Køn == "mk") return "Unisex";
+
+            if (NameInDB.Køn == "m") return "Dreng";
+
+            else return "Pige";
+
         }
    
     }
+    
 }

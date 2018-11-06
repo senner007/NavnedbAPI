@@ -3,6 +3,8 @@ https://www.codetoshow.com
 
 # API
 
+https://www.codetoshow.com/api/navne/Ole
+
 https://www.codetoshow.com/api/navne
 
 https://www.codetoshow.com/api/navne?startsWith=a
