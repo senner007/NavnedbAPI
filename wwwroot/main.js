@@ -92,11 +92,12 @@ function reset () {
 
 const callApi = (function () {
 
-    if (waitTrigger) return;
+    
 
     var waitTrigger;
 
     return async function callApi (textInput) {
+        if (waitTrigger) return; 
         waitTrigger = true;
         const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (checkSex() ? '&sex=' + checkSex(): "")); 
         const toJson = await response.json();
