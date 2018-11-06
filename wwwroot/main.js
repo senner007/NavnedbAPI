@@ -20,7 +20,7 @@ function processLargeArray(array, textInput) {
         // TODO : Improve me!
         var fragment = document.createDocumentFragment();
         while (cnt-- && index < array.length) {
-            // console.log(cnt)
+           
             if (array[index].navn.startsWith(textFormat)) {
                 var el = document.createElement('li');
                 el.classList.add('list-group-item'); 
@@ -60,7 +60,7 @@ function reset () {
         if (cachedArray && cachedArray.length > 0 && cachedArray[0].navn[0].toLowerCase() == textInput.value[0].toLowerCase()) {
             console.log('from cached');
             processLargeArray(cachedArray, textInput);
-        } else {
+        } else if (!waitTrigger){
             console.log('from fetch');
             calltheApi();
         }
@@ -90,14 +90,12 @@ function reset () {
 
 // waitTrigger will remain true when Promise pending
 
+var waitTrigger;
+
 const callApi = (function () {
 
-    
-
-    var waitTrigger;
-
     return async function callApi (textInput) {
-        if (waitTrigger) return; 
+   
         waitTrigger = true;
         const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (checkSex() ? '&sex=' + checkSex(): "")); 
         const toJson = await response.json();
