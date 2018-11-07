@@ -47,17 +47,18 @@ const processLargeArray = (function () {
 
 }());
 
+ 
 
-;(function setHandlers() {
+;(function IIFE() {
 
     var cachedArray = undefined;
-
-    var textInput = document.querySelector("#textId");
 
     function processStart(arr) {
         cachedArray = arr;
         processLargeArray.process(arr, textInput);
-    } 
+    }
+
+    var textInput = document.querySelector("#textId");
 
     document.querySelector("#textId").addEventListener('keyup', function (e) {
 
@@ -77,7 +78,7 @@ const processLargeArray = (function () {
     });
 
     document.querySelector("#inputSex").addEventListener('change', function (e) {
-        
+
         callApi.call(textInput).then(arr => processStart(arr));
 
     });
@@ -99,7 +100,7 @@ const callApi = (function () {
 }());
 
 
-const checkSex = (function IIFE() {
+const checkSex = (function () {
     // close over inputSex var
     const inputSex = document.querySelector('#inputSex');
     return () => inputSex[inputSex.selectedIndex].dataset.sex;
