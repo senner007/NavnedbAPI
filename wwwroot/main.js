@@ -39,8 +39,7 @@ function processLargeArray(array, input) {
 }
 
 var GLOBAL = {
-    clearSetTimeout : false,
-    waitForPromise: false
+    clearSetTimeout : false
 }
 
 
@@ -65,7 +64,7 @@ function reset () {
         if (cachedArray && cachedArray.length > 0 && cachedArray[0].navn[0].toLowerCase() == textInput.value[0].toLowerCase()) {
             console.log('from cached');
             processLargeArray(cachedArray, textInput);
-        } else if(!GLOBAL.waitForPromise) {
+        } else if(!callApi.isPending) {
             console.log('from fetch');
             calltheApi();
         }
@@ -79,12 +78,12 @@ function reset () {
             reset();
             return;
         }
-
         calltheApi();
+
     });
 
     function calltheApi () {
-        callApi(textInput).then(arr => {
+        callApi.call(textInput).then(arr => {
             cachedArray = arr; 
             processLargeArray(arr, textId)
         });
@@ -93,15 +92,22 @@ function reset () {
 }());
 
 
-// waitTrigger will remain true when Promise pending
+const callApi = (function () {
 
-async function callApi (textInput) {
-    GLOBAL.waitForPromise = true;
-    const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (checkSex() ? '&sex=' + checkSex(): "")); 
-    const toJson = await response.json();
-    GLOBAL.waitForPromise = false;
-    return toJson;
-}
+
+    return {
+        call : async function callApi (textInput) {
+                this.isPending = true;
+                const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (checkSex() ? '&sex=' + checkSex(): "")); 
+                const toJson = await response.json();
+                this.isPending = false;
+                return toJson;       
+        },
+        isPending : false
+    }
+
+}());
+
 
 
 const checkSex = (function IIFE () {
