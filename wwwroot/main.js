@@ -109,28 +109,11 @@ const callApi = (function () {
 }());
 
 
-
 const checkSex = (function IIFE () {
     // close over inputSex var
     const inputSex = document.querySelector('#inputSex');
-    return function  () {
-        var selectedSex;
-        switch(inputSex.selectedIndex) {
-            case 0:
-                selectedSex = "";
-            break;
-            case 1:
-                selectedSex = "m";
-            break;
-            case 2:
-                selectedSex = "k";
-            break;
-            case 3:
-                selectedSex = "mk";
-            break;
-        }
-        return selectedSex;
-    }
+    return () => inputSex[inputSex.selectedIndex].dataset.sex;
 }());
+
 
 
