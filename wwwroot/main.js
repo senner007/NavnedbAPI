@@ -47,18 +47,17 @@ const processLargeArray = (function () {
 
 }());
 
+
 ;(function setHandlers() {
 
     var cachedArray = undefined;
 
     var textInput = document.querySelector("#textId");
 
-    function calltheApi() {
-        callApi.call(textInput).then(arr => {
-            cachedArray = arr;
-            processLargeArray.process(arr, textId)
-        });
-    }
+    function processStart(arr) {
+        cachedArray = arr;
+        processLargeArray.process(arr, textInput);
+    } 
 
     document.querySelector("#textId").addEventListener('keyup', function (e) {
 
@@ -72,19 +71,22 @@ const processLargeArray = (function () {
             processLargeArray.process(cachedArray, textInput);
         } else if (!callApi.isPending) {
             console.log('from fetch');
-            calltheApi();
+            callApi.call(textInput).then(arr => processStart(arr));
         }
+
     });
 
     document.querySelector("#inputSex").addEventListener('change', function (e) {
 
         cachedArray = undefined;
-        if (textId.value == "") {
+        if (textInput.value == "") {
             processLargeArray.reset();
             return;
         }
-        calltheApi();
+        callApi.call(textInput).then(arr => processStart(arr));
+
     });
+
 
 }());
 
