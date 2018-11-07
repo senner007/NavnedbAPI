@@ -68,7 +68,7 @@ const processLargeArray = (function () {
 
         if (cachedArray && cachedArray.length > 0 && cachedArray[0].navn[0].toLowerCase() == textInput.value[0].toLowerCase()) {
             console.log('from cached');
-            processLargeArray.process(cachedArray, textInput);
+            processStart(cachedArray);
         } else if (!callApi.isPending) {
             console.log('from fetch');
             callApi.call(textInput).then(arr => processStart(arr));
@@ -77,12 +77,7 @@ const processLargeArray = (function () {
     });
 
     document.querySelector("#inputSex").addEventListener('change', function (e) {
-
-        cachedArray = undefined;
-        if (textInput.value == "") {
-            processLargeArray.reset();
-            return;
-        }
+        
         callApi.call(textInput).then(arr => processStart(arr));
 
     });
