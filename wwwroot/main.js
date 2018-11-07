@@ -32,7 +32,7 @@ const processLargeArray = (function () {
             if (clearSetTimeout) clearTimeout(clearSetTimeout);
             ul.innerHTML = "";
         },
-        process: function (array, input, textFormat) {
+        process: function (array, input) {
             this.reset();
             var textFormat = input.value != "" ? input.value[0].toUpperCase() + input.value.toLowerCase().substring(1, input.value.length) : "";
             // TODO : Check for hyphen - Improve me!
