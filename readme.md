@@ -1,4 +1,4 @@
-# Application
+# Application - Search for a danish name ( like "Anders" )
 https://www.codetoshow.com
 
 # API
