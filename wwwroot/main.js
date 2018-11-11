@@ -2,7 +2,7 @@
 
 const processLargeArray = (function () {
 
-    var clearSetTimeout = undefined;
+    var timerId = undefined;
     var ul = document.querySelector('ul');
     var chunk = 500;
 
@@ -23,13 +23,13 @@ const processLargeArray = (function () {
         ul.appendChild(fragment);
 
         if (index < array.length) {
-            clearSetTimeout = setTimeout(() => doChunk(array, index, textFormat), 1);
+            timerId = setTimeout(() => doChunk(array, index, textFormat), 1);
         }
     }
 
     return {
         reset: function () {
-            if (clearSetTimeout) clearTimeout(clearSetTimeout);
+            if (timerId) clearTimeout(timerId);
             ul.innerHTML = "";
         },
         process: function (array, input) {
