@@ -1,5 +1,6 @@
-# Application - Search for a danish name ( like "Anders" )
-- Demonstrating fast DOM manipulation without blocking the UI
+# Application - Search and filter danish names
+Demonstrating fast DOM manipulation without blocking the UI
+
 https://www.codetoshow.com
 
 # API
