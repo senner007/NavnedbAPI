@@ -63,15 +63,15 @@ namespace ParseCSV
        string Name { get; set; }
        string Sex { get; set; }
     }
-    public class BoyName : NameAbstract, IName
+    public class BoyName : NameAbstract
     {
         public override string Sex { get; set; } = "M";
     }
-    public class GirlName : NameAbstract, IName
+    public class GirlName : NameAbstract
     {
         public override string Sex { get; set; } = "F";
     }
-    public class UnisexName : NameAbstract, IName
+    public class UnisexName : NameAbstract
     {
         public override string Sex { get; set; } = "MF";
     }
