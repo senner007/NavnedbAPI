@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,12 +18,12 @@ namespace NavnedbAPI.Controllers
         {
             NavnedbContext dbContext = new NavnedbContext();
             // TODO : improve me!
-            if (startsWith == "" && sex == "") {
+            if (String.IsNullOrEmpty(startsWith) && String.IsNullOrEmpty(startsWith)) {
                 // Add total count to header
                 Request.HttpContext.Response.Headers.Add("Navne-Total-Count", dbContext.Navne.Count().ToString());
                 return Ok(dbContext.Navne);
             }
-            var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(startsWith) || startsWith == "") && (n.Køn == sex || sex == "")).Select(s => new { Navn = s.Navn, Køn = s.Køn});
+            var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(startsWith) && n.Køn.Contains(sex))).Select(s => new { Navn = s.Navn, Køn = s.Køn});
             return Ok(navne);
         }
 
