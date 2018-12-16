@@ -1,30 +1,41 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using NavnedbAPI.Models;
 
 namespace NavnedbAPI.Controllers
 {
+
+    public class QueryParameters
+    {
+        [StringLength(50)]
+        public string startsWith { get; set; } = "";
+        [StringLength(2)]
+        public string sex { get; set; } = "";
+        public uint take { get; set; } = int.MaxValue;
+        public uint skip { get; set; } = 0;
+    }
+    // string startsWith = "", string sex = "", int take = int.MaxValue, int skip = 0
+
     [Route("api/[controller]")]
     [ApiController]
     public class NavneController : ControllerBase
     {
         // GET api/navne
         [HttpGet]
-        public ActionResult<IEnumerable<Navne>> Get(string startsWith = "", string sex = "")
+        public ActionResult<IEnumerable<Navne>> Get([FromQuery] QueryParameters parameters)
         {
             NavnedbContext dbContext = new NavnedbContext();
             // TODO : improve me!
-            if (String.IsNullOrEmpty(startsWith) && String.IsNullOrEmpty(startsWith)) {
+            if (String.IsNullOrEmpty(parameters.startsWith) && String.IsNullOrEmpty(parameters.sex)) {
                 // Add total count to header
                 Request.HttpContext.Response.Headers.Add("Navne-Total-Count", dbContext.Navne.Count().ToString());
                 return Ok(dbContext.Navne);
             }
-            var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(startsWith) && (n.Køn == sex || sex == ""))).Select(s => new { Navn = s.Navn, Køn = s.Køn});
-            return Ok(navne);
+            var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(parameters.startsWith) && (n.Køn == parameters.sex || parameters.sex == ""))).Select(s => new { Navn = s.Navn, Køn = s.Køn});
+             return Ok(navne.Skip((int)parameters.skip).Take((int)parameters.take));
         }
 
         // GET api/navne/1
