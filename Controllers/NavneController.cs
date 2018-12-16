@@ -7,7 +7,7 @@ using NavnedbAPI.Models;
 
 namespace NavnedbAPI.Controllers
 {
-
+    // https://stackoverflow.com/questions/43895485/required-query-string-parameter-in-asp-net-core
     public class QueryParameters
     {
         [StringLength(50)]
@@ -23,6 +23,7 @@ namespace NavnedbAPI.Controllers
     [ApiController]
     public class NavneController : ControllerBase
     {
+        
         // GET api/navne
         [HttpGet]
         public ActionResult<IEnumerable<Navne>> Get([FromQuery] QueryParameters parameters)
@@ -32,10 +33,10 @@ namespace NavnedbAPI.Controllers
             if (String.IsNullOrEmpty(parameters.startsWith) && String.IsNullOrEmpty(parameters.sex)) {
                 // Add total count to header
                 Request.HttpContext.Response.Headers.Add("Navne-Total-Count", dbContext.Navne.Count().ToString());
-                return Ok(dbContext.Navne);
+                return Ok(dbContext.Navne.Skip((int)parameters.skip).Take((int)parameters.take));
             }
             var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(parameters.startsWith) && (n.Køn == parameters.sex || parameters.sex == ""))).Select(s => new { Navn = s.Navn, Køn = s.Køn});
-             return Ok(navne.Skip((int)parameters.skip).Take((int)parameters.take));
+            return Ok(navne.Skip((int)parameters.skip).Take((int)parameters.take));
         }
 
         // GET api/navne/1
