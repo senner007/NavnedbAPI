@@ -4,7 +4,7 @@ const processLargeArray = (function () {
 
     var timerId = undefined;
     var ul = document.querySelector('ul');
-    var chunk = 500;
+    var chunk = 300;
 
     function doChunk(array, index, textFormat) {
         var cnt = chunk;
@@ -77,7 +77,7 @@ const processLargeArray = (function () {
 
     });
 
-    document.querySelector("#inputSex").addEventListener('change', function (e) {
+    document.querySelector("#inputGender").addEventListener('change', function (e) {
 
         callApi.call(textInput).then(arr => processStart(arr));
 
@@ -90,8 +90,10 @@ const callApi = (function () {
     return {
         call: async function callApi(textInput) {
             this.isPending = true;
-            const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (checkSex() ? '&sex=' + checkSex() : ""));
+            console.time('t');
+            const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (getGender() ? '&sex=' + getGender() : ""));
             const toJson = await response.json();
+            console.timeEnd('t');
             this.isPending = false;
             return toJson;
         },
@@ -100,8 +102,8 @@ const callApi = (function () {
 }());
 
 
-const checkSex = (function () {
-    // close over inputSex var
-    const inputSex = document.querySelector('#inputSex');
-    return () => inputSex[inputSex.selectedIndex].dataset.sex;
+const getGender = (function () {
+    // close over inputGender var
+    const inputGender = document.querySelector('#inputGender');
+    return () => inputGender[inputGender.selectedIndex].dataset.gender;
 }());
