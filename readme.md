@@ -9,7 +9,7 @@ https://www.codetoshow.com/api/navne/Ole
 
 https://www.codetoshow.com/api/navne
 
-https://www.codetoshow.com/api/navn?skip=100&take=100
+https://www.codetoshow.com/api/navne?skip=100&take=100
 
 https://www.codetoshow.com/api/navne?startsWith=a
 
