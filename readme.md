@@ -9,6 +9,8 @@ https://www.codetoshow.com/api/navne/Ole
 
 https://www.codetoshow.com/api/navne
 
+https://www.codetoshow.com/api/navn?skip=100&take=100
+
 https://www.codetoshow.com/api/navne?startsWith=a
 
 https://www.codetoshow.com/api/navne?startsWith=a&gender=m
@@ -24,6 +26,9 @@ https://www.codetoshow.com/api/navne/1
 
 ### To build to bin/Release/netcoreapp2.1/win10-x64/publish
 - dotnet publish -c Release -r win10-x64
+
+### Fix for .NET Core 2.2 Build
+  https://stackoverflow.com/questions/53730020/deploying-a-plain-asp-net-core-2-2-web-app-in-azure-using-web-deploy-is-throwing/53730715#53730715
 
 ### Create an appsettings.json with a connectionstring to db:
 
