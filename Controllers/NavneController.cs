@@ -13,11 +13,10 @@ namespace NavnedbAPI.Controllers
         [StringLength(50)]
         public string startsWith { get; set; } = "";
         [StringLength(2)]
-        public string sex { get; set; } = "";
+        public string gender { get; set; } = "";
         public uint take { get; set; } = int.MaxValue;
         public uint skip { get; set; } = 0;
     }
-    // string startsWith = "", string sex = "", int take = int.MaxValue, int skip = 0
 
     [Route("api/[controller]")]
     [ApiController]
@@ -30,12 +29,12 @@ namespace NavnedbAPI.Controllers
         {
             NavnedbContext dbContext = new NavnedbContext();
             // TODO : improve me!
-            if (String.IsNullOrEmpty(parameters.startsWith) && String.IsNullOrEmpty(parameters.sex)) {
+            if (String.IsNullOrEmpty(parameters.startsWith) && String.IsNullOrEmpty(parameters.gender)) {
                 // Add total count to header
                 Request.HttpContext.Response.Headers.Add("Navne-Total-Count", dbContext.Navne.Count().ToString());
                 return Ok(dbContext.Navne.Skip((int)parameters.skip).Take((int)parameters.take));
             }
-            var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(parameters.startsWith) && (n.Køn == parameters.sex || parameters.sex == ""))).Select(s => new { Navn = s.Navn, Køn = s.Køn});
+            var navne = dbContext.Navne.Where(n => (n.Navn.StartsWith(parameters.startsWith) && (n.Køn == parameters.gender || parameters.gender == ""))).Select(s => new { Navn = s.Navn, Køn = s.Køn});
             return Ok(navne.Skip((int)parameters.skip).Take((int)parameters.take));
         }
 

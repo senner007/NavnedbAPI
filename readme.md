@@ -11,7 +11,7 @@ https://www.codetoshow.com/api/navne
 
 https://www.codetoshow.com/api/navne?startsWith=a
 
-https://www.codetoshow.com/api/navne?startsWith=a&sex=m
+https://www.codetoshow.com/api/navne?startsWith=a&gender=m
 
 https://www.codetoshow.com/api/navne/1
 
@@ -23,7 +23,7 @@ https://www.codetoshow.com/api/navne/1
 - dotnet run
 
 ### To build to bin/Release/netcoreapp2.1/win10-x64/publish
-- dotnet publish -c Release -r win10-x64 /p:TrimUnusedDependencies=true
+- dotnet publish -c Release -r win10-x64
 
 ### Create an appsettings.json with a connectionstring to db:
 
@@ -56,24 +56,24 @@ namespace ParseCSV
     public abstract class NameAbstract : IName
     {
         public string Name { get; set; }
-        public virtual string Sex { get; set; }
+        public virtual string Gender { get; set; }
     }
     public interface IName
     {
        string Name { get; set; }
-       string Sex { get; set; }
+       string Gender { get; set; }
     }
     public class BoyName : NameAbstract
     {
-        public override string Sex { get; set; } = "M";
+        public override string Gender { get; set; } = "M";
     }
     public class GirlName : NameAbstract
     {
-        public override string Sex { get; set; } = "F";
+        public override string Gender { get; set; } = "F";
     }
     public class UnisexName : NameAbstract
     {
-        public override string Sex { get; set; } = "MF";
+        public override string Gender { get; set; } = "MF";
     }
 
 }
@@ -94,7 +94,7 @@ namespace ParseCSV
          
             foreach (var n in boynames)
             {
-                Console.WriteLine(n.Name + " " +  n.Sex);
+                Console.WriteLine(n.Name + " " +  n.Gender);
             }
         }
         private static List<T> ReadCSVFile<T>(string path) where T : IName, new()

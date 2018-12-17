@@ -91,7 +91,7 @@ const callApi = (function () {
         call: async function callApi(textInput) {
             this.isPending = true;
             console.time('t');
-            const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (getGender() ? '&sex=' + getGender() : ""));
+            const response = await fetch('api/navne?startsWith=' + textInput.value[0] + (getGender() ? '&gender=' + getGender() : ""));
             const toJson = await response.json();
             console.timeEnd('t');
             this.isPending = false;
